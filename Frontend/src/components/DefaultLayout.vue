@@ -27,8 +27,8 @@
                   </div>
                   <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
                     <MenuItems class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 focus:outline-hidden">
-                      <MenuItem  v-slot="{ active }">
-                        <button @click="logout" :class="['block px-4 py-2 text-sm text-gray-700']">{{ item.name }}</button>
+                      <MenuItem>
+                        <button @click="logout" :class="['block px-4 py-2 text-sm text-gray-700']">Sign Out</button>
                       </MenuItem>
                     </MenuItems>
                   </transition>
@@ -62,29 +62,21 @@
               </div>
             </div>
             <div class="mt-3 space-y-1 px-2">
-              <DisclosureButton v-for="item in userNavigation" :key="item.name" as="a" :href="item.href" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">{{ item.name }}</DisclosureButton>
+              <DisclosureButton @click="logout" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Sign Out</DisclosureButton>
             </div>
           </div>
         </DisclosurePanel>
       </Disclosure>
-  
-      <header class="bg-white shadow-sm">
-        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <h1 class="text-3xl font-bold tracking-tight text-gray-900">Dashboard</h1>
-        </div>
-      </header>
-      <main>
-        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <RouterView/>
-        </div>
-      </main>
+      <RouterView/>
     </div>
   </template>
   
   <script setup>
   import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
   import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
-import { RouterLink, RouterView } from 'vue-router';
+  import { RouterLink, RouterView } from 'vue-router';
+import axiosClient from '../axios';
+import router from '../router';
   
   const user = {
     name: 'Tom Cook',
@@ -97,5 +89,9 @@ import { RouterLink, RouterView } from 'vue-router';
     { name: 'My Images', to:{name:'MyImages'}},
 
   ]
+
+  const logout = () =>{
+    axiosClient.post('/logout').then(response => router.push({name:'Login'}))
+  }
 
   </script>
